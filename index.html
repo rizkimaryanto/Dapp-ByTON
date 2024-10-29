@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ByTON Dapp</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ByTON Dapp</h1>
+        </header>
+        <main>
+            <section id="dashboard">
+                <h2>Your Dashboard</h2>
+                <p>Balance: <span id="balance">0</span> ByTON</p>
+                <button id="claimAirdrop">Claim Airdrop</button>
+            </section>
+
+            <section id="register">
+                <h2>Register</h2>
+                <input type="text" id="userName" placeholder="User Name">
+                <input type="number" id="userUID" placeholder="User UID">
+                <button id="registerUser">Register</button>
+            </section>
+
+            <section id="topUsers">
+                <h2>Top Users</h2>
+                <ul id="userList"></ul>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

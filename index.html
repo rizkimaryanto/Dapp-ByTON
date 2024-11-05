@@ -1,36 +1,191 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ByTON Dapp</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>ByTon Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            background: #007bff;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        main {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        #coinAnimation {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border-radius: 50%;
+            box-shadow: 0px 0px 20px rgba(0, 114, 255, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin: 20px auto;
+        }
+
+        #coinAnimation:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 0px 30px rgba(0, 114, 255, 0.8);
+        }
+
+        #coinAnimation:active {
+            transform: scale(1.2);
+            box-shadow: 0px 0px 40px rgba(0, 114, 255, 0.9);
+        }
+
+        #coinCount {
+            font-size: 24px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let coinCount = parseInt(localStorage.getItem('coinCount')) || 0;
+            document.getElementById('coinCount').innerText = 'GCO: ' + coinCount;
+
+            document.getElementById('coinAnimation').addEventListener('click', function() {
+                coinCount++;
+                document.getElementById('coinCount').innerText = 'GCO: ' + coinCount;
+                localStorage.setItem('coinCount', coinCount);
+                updateLeaderboard();
+            });
+
+            document.getElementById('startGame').addEventListener('click', function() {
+                alert('Permainan dimulai! Ketuk koin untuk menghasilkan GCO!');
+            });
+
+            document.querySelectorAll('nav ul li a').forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    showPage(event.target.getAttribute('data-page'));
+                });
+            });
+
+            function showPage(page) {
+                document.querySelectorAll('.page-section').forEach(section => section.style.display = 'none');
+                document.getElementById(page).style.display = 'block';
+            }
+
+            function updateLeaderboard() {
+                const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+                const username = localStorage.getItem('username') || 'Pengguna';
+
+                leaderboard.push({ username: username, score: coinCount });
+                leaderboard.sort((a, b) => b.score - a.score);
+
+                localStorage.setItem('leaderboard', JSON.stringify(leaderboard.slice(0, 10)));
+
+                const leaderboardList = document.getElementById('leaderboardList');
+                leaderboardList.innerHTML = leaderboard.map(entry => `<p>${entry.username}: ${entry.score}</p>`).join('');
+            }
+
+            showPage('home');
+        });
+
+        function saveUsername() {
+            const username = document.getElementById('usernameInput').value;
+            localStorage.setItem('username', username);
+            alert('Nama pengguna disimpan sebagai: ' + username);
+        }
+    </script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>ByTON Dapp</h1>
-        </header>
-        <main>
-            <section id="dashboard">
-                <h2>Your Dashboard</h2>
-                <p>Balance: <span id="balance">0</span> ByTON</p>
-                <button id="claimAirdrop">Claim Airdrop</button>
-            </section>
+    <header>
+        <h1>Selamat Datang di ByTon</h1>
+        <nav>
+            <ul>
+                <li><a href="#" data-page="home">Home</a></li>
+                <li><a href="#" data-page="game">Game</a></li>
+                <li><a href="#" data-page="marketplace">Marketplace</a></li>
+                <li><a href="#" data-page="community">Community</a></li>
+                <li><a href="#" data-page="leaderboard">Leaderboard</a></li>
+                <li><a href="#" data-page="username">Nama Pengguna</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="home" class="page-section">
+            <h2>Home</h2>
+            <p>Selamat datang di ByTon, tempat Anda bisa memainkan game dan mendapatkan GCO!</p>
+        </section>
 
-            <section id="register">
-                <h2>Register</h2>
-                <input type="text" id="userName" placeholder="User Name">
-                <input type="number" id="userUID" placeholder="User UID">
-                <button id="registerUser">Register</button>
-            </section>
+        <section id="game" class="page-section">
+            <h2>Game</h2>
+            <p>Tap pada koin untuk mendapatkan GCO!</p>
+            <button id="startGame">Mulai Bermain</button>
+            <div id="coinAnimation">GCO</div>
+            <div id="coinCount">GCO: 0</div>
+        </section>
 
-            <section id="topUsers">
-                <h2>Top Users</h2>
-                <ul id="userList"></ul>
-            </section>
-        </main>
-    </div>
-    <script src="script.js"></script>
+        <section id="marketplace" class="page-section">
+            <h2>Marketplace</h2>
+            <p>Marketplace di mana Anda dapat menukar atau membeli item dengan GCO Anda.</p>
+            <a href="https://coinmarketcap.com/dexscan/polygon/0xccf259625605d763fa7732e5f04bb0068e04246e" target="_blank">Buka Marketplace</a>
+        </section>
+
+        <section id="community" class="page-section">
+            <h2>Community</h2>
+            <p>Bergabunglah dengan komunitas kami untuk diskusi dan pembaruan terbaru.</p>
+        </section>
+
+        <section id="leaderboard" class="page-section">
+            <h2>Leaderboard</h2>
+            <div id="leaderboardList">Peringkat tertinggi akan muncul di sini</div>
+        </section>
+
+        <section id="username" class="page-section">
+            <h2>Atur Nama Pengguna</h2>
+            <input type="text" id="usernameInput" placeholder="Masukkan nama pengguna">
+            <button onclick="saveUsername()">Simpan Nama Pengguna</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 ByTon. Ikuti kami di <a href="https://t.me/CryptoAirdropOpen" target="_blank">Telegram</a>.</p>
+    </footer>
 </body>
 </html>

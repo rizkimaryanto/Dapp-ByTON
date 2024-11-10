@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T-Coin</title>
+    <title>Nitrous</title>
     <style>
         body {
             margin: 0;
@@ -19,9 +19,12 @@
             width: 100%;
             text-align: center;
             padding: 20px;
-            font-size: 1.5em;
+            font-size: 3em;
             font-weight: bold;
-            background: #000000;
+            background: linear-gradient(to right, silver, blue);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
         }
         .balance-container, .page-content {
             text-align: center;
@@ -35,17 +38,31 @@
             font-size: 14em;
             cursor: pointer;
             margin-top: 20px;
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.5s ease-in-out;
+        }
+        .currency-icon.spin {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from {transform: rotate(0deg);}
+            to {transform: rotate(360deg);}
         }
         .currency-icon:active {
-            transform: rotate(20deg) translateX(10px);
+            animation: spin 0.2s linear infinite;
         }
-        .status-bar, .energy-bar, .energy-level {
+        .energy-bar {
             margin-top: 10px;
+            width: 50%;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
         }
         .energy-level {
             background-color: green;
-            height: 10px;
+            height: 100%;
+            width: 50%;
+            transition: width 0.3s ease-in-out;
         }
         .menu {
             display: flex;
@@ -66,7 +83,7 @@
     </style>
 </head>
 <body>
-    <div class="header">T-COIN</div>
+    <div class="header">Nitrous</div>
     
     <!-- Halaman Home -->
     <div class="balance-container" id="home">
@@ -84,7 +101,7 @@
             <div class="energy-level" id="energy-level" style="width: 100%;"></div>
         </div>
         <div id="energy-text">100000/100000</div>
-        <div class="currency-icon" onclick="earnCoins()">🪙</div>
+        <div class="currency-icon" id="currency-icon" onclick="earnCoins()">🪙</div>
     </div>
 
     <!-- Halaman Mates -->
@@ -147,6 +164,11 @@
         }
 
         function earnCoins() {
+            const currencyIcon = document.getElementById("currency-icon");
+            if (!currencyIcon.classList.contains("spin")) {
+                currencyIcon.classList.add("spin");
+                setTimeout(() => currencyIcon.classList.remove("spin"), 1000);
+            }
             if (energy > 0) {
                 balance += coinAmount;
                 document.getElementById("balance").innerText = balance.toLocaleString();
@@ -192,24 +214,14 @@
             const costs = [10000, 100000, 1000000];
             if (balance >= costs[level - 1]) {
                 balance -= costs[level - 1];
-                coinAmount *= 2;
                 document.getElementById("balance").innerText = balance.toLocaleString();
+                alert(`Boost level ${level} berhasil dibeli!`);
                 updateLocalStorage();
-                alert(`Boost level ${level} aktif! Reward per-klik dan progress bar dikali 2.`);
             } else {
-                alert("Saldo tidak mencukupi.");
+                alert("Saldo koin tidak mencukupi untuk boost ini.");
             }
         }
-
-        setInterval(function() {
-            if (energy < maxEnergy) {
-                energy += maxEnergy / 3600;
-                if (energy > maxEnergy) energy = maxEnergy;
-                document.getElementById("energy-text").innerText = `${Math.floor(energy)}/${maxEnergy}`;
-                document.getElementById("energy-level").style.width = `${(energy / maxEnergy) * 100}%`;
-                updateLocalStorage();
-            }
-        }, 1000);
     </script>
 </body>
 </html>
+            

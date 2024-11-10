@@ -6,120 +6,52 @@
     <title>T-Coin</title>
     <style>
         body {
-            margin: 0;
-            font-family: Arial, sans-serif;
             background: linear-gradient(145deg, #2c003e, #3b0066);
+            font-family: Arial, sans-serif;
             color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
             height: 100vh;
+            margin: 0;
         }
-        .header {
-            width: 100%;
+        .header, .balance-container, .menu {
             text-align: center;
-            padding: 20px;
-            font-size: 1.5em;
-            font-weight: bold;
-            background: #000000;
-        }
-        .balance-container {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .balance {
-            font-size: 2.5em;
-        }
-        .currency-icon {
-            font-size: 4em;
-        }
-        .status-bar {
-            background: purple;
-            border-radius: 15px;
-            padding: 5px 15px;
-            margin-top: 10px;
-        }
-        .energy-bar {
-            width: 80%;
-            background: #444;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-        .energy-level {
-            width: 36%;
-            height: 20px;
-            background: purple;
-            border-radius: 10px;
         }
         .menu {
             display: flex;
             justify-content: space-around;
             width: 100%;
-            background: #000;
-            padding: 10px;
             position: absolute;
             bottom: 0;
+            padding: 20px;
+            background: black;
         }
         .menu-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            cursor: pointer;
             color: #bbb;
-            cursor: pointer;
-        }
-        .earn-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #ff9800;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
         }
     </style>
 </head>
 <body>
-    <div class="header">T-COIN</div>
-    <div class="balance-container">
-        <div class="status-bar">Staking closes in 10 days</div>
-        <div>Your Balance:</div>
-        <div class="balance" id="balance">406,520</div>
-        <div class="currency-icon">🪙</div>
+    <div class="header">
+        <h1>T-COIN</h1>
+        <div id="balance">Balance: 0 T-Coin</div>
     </div>
-    <button class="earn-button" onclick="earnCoins()">Earn Coins</button>
-    <div class="energy-bar">
-        <div class="energy-level"></div>
-    </div>
-    <div id="energy-text">2000/5500</div>
+    <button onclick="earnCoins()">Earn Coins</button>
     <div class="menu">
-        <div class="menu-item" onclick="alert('Mates feature coming soon!')">
-            <span>👤</span>
-            <div>Mates</div>
-        </div>
-        <div class="menu-item" onclick="alert('Tasks feature coming soon!')">
-            <span>📋</span>
-            <div>Tasks</div>
-        </div>
-        <div class="menu-item" onclick="alert('Staking feature coming soon!')">
-            <span>🏦</span>
-            <div>Staking</div>
-        </div>
-        <div class="menu-item" onclick="alert('Boost feature coming soon!')">
-            <span>🚀</span>
-            <div>Boost</div>
-        </div>
+        <div class="menu-item" onclick="alert('Mates feature coming soon!')">Mates</div>
+        <div class="menu-item" onclick="alert('Tasks feature coming soon!')">Tasks</div>
+        <div class="menu-item" onclick="alert('Staking feature coming soon!')">Staking</div>
+        <div class="menu-item" onclick="alert('Boost feature coming soon!')">Boost</div>
     </div>
 
     <script>
-        // Initial balance
-        let balance = 406520;
+        let balance = 0;
 
-        // Function to add coins
         function earnCoins() {
-            const coinAmount = 1000;  // jumlah koin yang ditambahkan setiap klik
-            balance += coinAmount;
-            document.getElementById("balance").innerText = balance.toLocaleString(); // update tampilan balance
+            balance += 1000;  // Add 1000 coins each time
+            document.getElementById("balance").innerText = `Balance: ${balance} T-Coin`;
         }
     </script>
 </body>

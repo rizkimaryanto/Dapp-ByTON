@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>T-Coin</title>
     <style>
-        /* Style Umum */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -24,9 +23,10 @@
             font-weight: bold;
             background: #000000;
         }
-        .balance-container {
-            margin-top: 20px;
+        .balance-container, .page-content {
             text-align: center;
+            display: none;
+            margin-top: 20px;
         }
         .balance {
             font-size: 2.5em;
@@ -35,19 +35,10 @@
             font-size: 14em;
             cursor: pointer;
             margin-top: 20px;
-            text-shadow: 4px 4px 0px #000, -4px 4px 0px #000, 4px -4px 0px #000, -4px -4px 0px #000;
+            transition: transform 0.1s;
         }
-        .energy-bar {
-            width: 80%;
-            background: #444;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-        .energy-level {
-            height: 20px;
-            background: purple;
-            border-radius: 10px;
-            width: 100%;
+        .status-bar, .energy-bar, .energy-level {
+            margin-top: 10px;
         }
         .menu {
             display: flex;
@@ -65,94 +56,86 @@
             color: #bbb;
             cursor: pointer;
         }
-        .page {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-        }
-        .back-button {
-            color: white;
-            background-color: #444;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 <body>
     <div class="header">T-COIN</div>
-
-    <!-- Kontainer Balance -->
-    <div class="balance-container">
+    
+    <!-- Halaman Home -->
+    <div class="balance-container" id="home">
+        <div class="status-bar">Staking closes in 10 days</div>
         <div>Your Balance:</div>
         <div class="balance" id="balance">406,520</div>
         <div class="currency-icon" onclick="earnCoins()">🪙</div>
         <div class="energy-bar">
-            <div class="energy-level" id="energy-level"></div>
+            <div class="energy-level" id="energy-level" style="width: 100%;"></div>
         </div>
         <div id="energy-text">100000/100000</div>
     </div>
-
-    <!-- Halaman Navigasi Mates -->
-    <div id="mates-page" class="page">
-        <div class="back-button" onclick="goBack()">Back</div>
-        <h2>Mates</h2>
-        <p>Bagikan kode untuk menambahkan teman:</p>
-        <a href="https://rizkimaryanto.github.io/Dapp-ByTON/">Bagikan kode Anda</a>
+    
+    <!-- Halaman Game -->
+    <div class="page-content" id="gamePage">
+        <h2>Game Menu</h2>
+        <p>Selamat datang di Game! Ketuk ikon koin di halaman Home untuk mulai.</p>
     </div>
 
-    <!-- Halaman Navigasi Tasks -->
-    <div id="tasks-page" class="page">
-        <div class="back-button" onclick="goBack()">Back</div>
-        <h2>Tasks</h2>
-        <ul id="tasks-list">
-            <li>1. Siapa pendiri dari N-TROUS? <button onclick="answerTask('Rizki Maryanto')">A: Rizki Maryanto</button></li>
-            <li>2. Tanggal berapakah N-TROUS dibuat? <button onclick="answerTask('09-09-2024')">A: 09-09-2024</button></li>
-            <!-- Tambah pertanyaan lain sesuai kebutuhan -->
-        </ul>
+    <!-- Halaman Mates -->
+    <div class="page-content" id="matesPage">
+        <h2>Mates Menu</h2>
+        <p>Bagikan kode ini untuk menambahkan teman:</p>
+        <p><a href="https://rizkimaryanto.github.io/Dapp-ByTON/">https://rizkimaryanto.github.io/Dapp-ByTON/</a></p>
     </div>
 
-    <!-- Halaman Navigasi Boost -->
-    <div id="boost-page" class="page">
-        <div class="back-button" onclick="goBack()">Back</div>
-        <h2>Boost</h2>
-        <button onclick="boostLevel(2, 10000)">Bayar 10,000 koin untuk Level 2</button>
-        <button onclick="boostLevel(3, 100000)">Bayar 100,000 koin untuk Level 3</button>
-        <button onclick="boostLevel(4, 1000000)">Bayar 1,000,000 koin untuk Level 4</button>
+    <!-- Halaman Tasks -->
+    <div class="page-content" id="tasksPage">
+        <h2>Tasks Menu</h2>
+        <button onclick="showTasks()">Mulai Jawaban</button>
     </div>
 
-    <!-- Menu Utama -->
+    <!-- Halaman Boost -->
+    <div class="page-content" id="boostPage">
+        <h2>Boost Menu</h2>
+        <button onclick="showBoostOptions()">Pilih Boost Level</button>
+    </div>
+
     <div class="menu">
-        <div class="menu-item" onclick="navigateTo('mates-page')">
+        <div class="menu-item" onclick="showPage('home')">
+            <span>🏠</span>
+            <div>Home</div>
+        </div>
+        <div class="menu-item" onclick="showPage('gamePage')">
+            <span>🎮</span>
+            <div>Game</div>
+        </div>
+        <div class="menu-item" onclick="showPage('matesPage')">
             <span>👤</span>
             <div>Mates</div>
         </div>
-        <div class="menu-item" onclick="navigateTo('tasks-page')">
+        <div class="menu-item" onclick="showPage('tasksPage')">
             <span>📋</span>
             <div>Tasks</div>
         </div>
-        <div class="menu-item" onclick="navigateTo('boost-page')">
+        <div class="menu-item" onclick="showPage('boostPage')">
             <span>🚀</span>
             <div>Boost</div>
         </div>
     </div>
 
     <script>
-        let balance = 406520;
-        let energy = 100000;
+        // Variabel dan fungsi utama
+        let balance = localStorage.getItem('balance') ? parseInt(localStorage.getItem('balance')) : 406520;
+        let energy = localStorage.getItem('energy') ? parseInt(localStorage.getItem('energy')) : 100000;
         const maxEnergy = 100000;
         const energyDecrease = 100;
         const coinAmount = 100;
 
-        function navigateTo(pageId) {
-            document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
-            document.getElementById(pageId).style.display = 'flex';
-        }
+        document.getElementById("balance").innerText = balance.toLocaleString();
+        document.getElementById("energy-text").innerText = `${energy}/${maxEnergy}`;
+        document.getElementById("home").style.display = "block"; // Tampilan awal
 
-        function goBack() {
-            document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
+        function updateLocalStorage() {
+            localStorage.setItem('balance', balance);
+            localStorage.setItem('energy', energy);
         }
 
         function earnCoins() {
@@ -160,37 +143,65 @@
                 balance += coinAmount;
                 document.getElementById("balance").innerText = balance.toLocaleString();
                 energy -= energyDecrease;
+                if (energy < 0) energy = 0;
                 document.getElementById("energy-text").innerText = `${energy}/${maxEnergy}`;
                 document.getElementById("energy-level").style.width = `${(energy / maxEnergy) * 100}%`;
+                updateLocalStorage();
             } else {
                 alert("Energy depleted! Wait for it to recharge.");
             }
         }
 
-        function answerTask(correctAnswer) {
-            const userAnswer = prompt("Masukkan jawaban Anda:");
-            if (userAnswer === correctAnswer) {
-                balance += 100000;
-                document.getElementById("balance").innerText = balance.toLocaleString();
-                alert("Jawaban benar! Anda mendapatkan 100,000 koin.");
-            } else {
-                alert("Jawaban salah.");
+        // Fungsi navigasi halaman
+        function showPage(pageId) {
+            document.querySelectorAll('.balance-container, .page-content').forEach(page => page.style.display = 'none');
+            document.getElementById(pageId).style.display = 'block';
+        }
+
+        function showTasks() {
+            const questions = [
+                { question: "Siapa pendiri dari N-TROUS?", answer: "Rizki Maryanto" },
+                { question: "Tanggal berapakah N-TROUS dibuat?", answer: "09-09-2024" },
+                { question: "Ada berapa orang team dari N-TROUS?", answer: "12" },
+                { question: "Di jaringan manakah N-TROUS?", answer: "Polygon" },
+                { question: "Berapa total suplai dari N-TROUS?", answer: "150.000.000" },
+            ];
+            for (let q of questions) {
+                const userAnswer = prompt(q.question);
+                if (userAnswer === q.answer) {
+                    balance += 100000;
+                    document.getElementById("balance").innerText = balance.toLocaleString();
+                    updateLocalStorage();
+                    alert("Jawaban benar! Anda mendapat 100,000 koin.");
+                } else {
+                    alert("Jawaban salah.");
+                }
             }
         }
 
-        function boostLevel(level, cost) {
-            if (balance >= cost) {
-                balance -= cost;
+        function showBoostOptions() {
+            const level = parseInt(prompt("Pilih level boost:\n1. 10,000 koin\n2. 100,000 koin\n3. 1,000,000 koin"));
+            const costs = [10000, 100000, 1000000];
+            if (balance >= costs[level - 1]) {
+                balance -= costs[level - 1];
+                coinAmount *= 2;
                 document.getElementById("balance").innerText = balance.toLocaleString();
-                alert(`Boost level ${level} aktif!`);
+                updateLocalStorage();
+                alert(`Boost level ${level} aktif! Reward per-klik dan progress bar dikali 2.`);
             } else {
                 alert("Saldo tidak mencukupi.");
             }
         }
 
-        document.getElementById("balance").innerText = balance.toLocaleString();
-        document.getElementById("energy-text").innerText = `${energy}/${maxEnergy}`;
-        document.getElementById("energy-level").style.width = `${(energy / maxEnergy) * 100}%`;
+        setInterval(function() {
+            if (energy < maxEnergy) {
+                energy += maxEnergy / 3600;
+                if (energy > maxEnergy) energy = maxEnergy;
+                document.getElementById("energy-text").innerText = `${Math.floor(energy)}/${maxEnergy}`;
+                document.getElementById("energy-level").style.width = `${(energy / maxEnergy) * 100}%`;
+                updateLocalStorage();
+            }
+        }, 1000);
     </script>
 </body>
 </html>

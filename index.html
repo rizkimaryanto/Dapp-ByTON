@@ -32,6 +32,8 @@
         }
         .currency-icon {
             font-size: 4em;
+            cursor: pointer;
+            margin-top: 20px;
         }
         .status-bar {
             background: purple;
@@ -46,10 +48,10 @@
             margin: 20px 0;
         }
         .energy-level {
-            width: 36%;
             height: 20px;
             background: purple;
             border-radius: 10px;
+            width: 100%; /* Awal penuh */
         }
         .menu {
             display: flex;
@@ -67,16 +69,6 @@
             color: #bbb;
             cursor: pointer;
         }
-        .earn-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #ff9800;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
     </style>
 </head>
 <body>
@@ -85,11 +77,10 @@
         <div class="status-bar">Staking closes in 10 days</div>
         <div>Your Balance:</div>
         <div class="balance" id="balance">406,520</div>
-        <div class="currency-icon">🪙</div>
+        <div class="currency-icon" onclick="earnCoins()">🪙</div> <!-- Icon currency sebagai tombol -->
     </div>
-    <button class="earn-button" onclick="earnCoins()">Earn Coins</button>
     <div class="energy-bar">
-        <div class="energy-level"></div>
+        <div class="energy-level" id="energy-level"></div>
     </div>
     <div id="energy-text">2000/5500</div>
     <div class="menu">
@@ -112,14 +103,28 @@
     </div>
 
     <script>
-        // Initial balance
         let balance = 406520;
+        let energy = 2000;
+        const maxEnergy = 5500;
+        const energyDecrease = 50; // Jumlah energy yang berkurang setiap klik
+        const coinAmount = 1000; // Jumlah koin yang ditambahkan setiap klik
 
-        // Function to add coins
         function earnCoins() {
-            const coinAmount = 1000;  // jumlah koin yang ditambahkan setiap klik
-            balance += coinAmount;
-            document.getElementById("balance").innerText = balance.toLocaleString(); // update tampilan balance
+            if (energy > 0) {
+                // Tambahkan koin ke balance
+                balance += coinAmount;
+                document.getElementById("balance").innerText = balance.toLocaleString();
+
+                // Kurangi energy
+                energy -= energyDecrease;
+                document.getElementById("energy-text").innerText = `${energy}/${maxEnergy}`;
+
+                // Update tampilan progress bar
+                const energyPercentage = (energy / maxEnergy) * 100;
+                document.getElementById("energy-level").style.width = `${energyPercentage}%`;
+            } else {
+                alert("Energy depleted! Wait for it to recharge.");
+            }
         }
     </script>
 </body>

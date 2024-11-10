@@ -31,22 +31,28 @@
             font-size: 2.5em;
         }
         .currency-icon {
-            font-size: 14em; /* Memperbesar ikon currency */
+            font-size: 14em;
             cursor: pointer;
             margin-top: 20px;
-            text-shadow: 4px 4px 0px #000, -4px 4px 0px #000, 4px -4px 0px #000, -4px -4px 0px #000; /* Menambah ketebalan */
-            transition: transform 0.1s, box-shadow 0.1s; /* Menambah transisi untuk animasi */
-            display: inline-block; /* Menghilangkan efek kotak */
+            text-shadow: 4px 4px 0px #000, -4px 4px 0px #000, 4px -4px 0px #000, -4px -4px 0px #000;
+            transition: transform 0.1s, box-shadow 0.1s;
+            display: inline-block;
         }
-        .currency-icon.clicked {
-            animation: shake 0.3s ease; /* Menambahkan animasi shake */
-            box-shadow: none; /* Menghilangkan bayangan kotak */
+        .currency-icon.push-left {
+            animation: push-left 0.3s ease;
         }
-        @keyframes shake {
-            0%, 100% { transform: scale(1); }
-            25% { transform: scale(1.05); }
-            50% { transform: scale(0.95); }
-            75% { transform: scale(1.05); }
+        .currency-icon.push-right {
+            animation: push-right 0.3s ease;
+        }
+        @keyframes push-left {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(-10px) scale(0.95); }
+            100% { transform: translateX(0); }
+        }
+        @keyframes push-right {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(10px) scale(0.95); }
+            100% { transform: translateX(0); }
         }
         .status-bar {
             background: purple;
@@ -90,7 +96,7 @@
         <div class="status-bar">Staking closes in 10 days</div>
         <div>Your Balance:</div>
         <div class="balance" id="balance">406,520</div>
-        <div class="currency-icon" onclick="earnCoins()">🪙</div>
+        <div class="currency-icon" onclick="earnCoins(event)">🪙</div>
         <div class="energy-bar">
             <div class="energy-level" id="energy-level"></div>
         </div>
@@ -127,7 +133,7 @@
             localStorage.setItem('energy', energy);
         }
 
-        function earnCoins() {
+        function earnCoins(event) {
             if (energy > 0) {
                 balance += coinAmount;
                 document.getElementById("balance").innerText = balance.toLocaleString();
@@ -139,8 +145,20 @@
                 updateLocalStorage();
 
                 const icon = document.querySelector('.currency-icon');
-                icon.classList.add('clicked');
-                setTimeout(() => icon.classList.remove('clicked'), 300);
+
+                // Hapus kelas animasi sebelumnya
+                icon.classList.remove('push-left', 'push-right');
+
+                // Tambahkan kelas animasi berdasarkan posisi klik
+                const rect = icon.getBoundingClientRect();
+                const clickPosition = event.clientX - rect.left;
+                const iconCenter = rect.width / 2;
+
+                if (clickPosition < iconCenter) {
+                    icon.classList.add('push-left');
+                } else {
+                    icon.classList.add('push-right');
+                }
             } else {
                 alert("Energy depleted! Wait for it to recharge.");
             }

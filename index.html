@@ -31,20 +31,22 @@
             font-size: 2.5em;
         }
         .currency-icon {
-            font-size: 12em;
+            font-size: 14em; /* Memperbesar ikon currency */
             cursor: pointer;
             margin-top: 20px;
-            text-shadow: 2px 2px 0px #000, -2px 2px 0px #000, 2px -2px 0px #000, -2px -2px 0px #000; /* Menambahkan ketebalan */
-            transition: transform 0.1s; /* Menambahkan transisi untuk efek animasi */
+            text-shadow: 4px 4px 0px #000, -4px 4px 0px #000, 4px -4px 0px #000, -4px -4px 0px #000; /* Menambah ketebalan */
+            transition: transform 0.1s, box-shadow 0.1s; /* Menambah transisi untuk animasi */
+            display: inline-block; /* Menghilangkan efek kotak */
         }
         .currency-icon.clicked {
-            animation: shake 0.3s; /* Menambahkan animasi shake */
+            animation: shake 0.3s ease; /* Menambahkan animasi shake */
+            box-shadow: none; /* Menghilangkan bayangan kotak */
         }
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.05); }
+            50% { transform: scale(0.95); }
+            75% { transform: scale(1.05); }
         }
         .status-bar {
             background: purple;
@@ -117,10 +119,9 @@
         let balance = localStorage.getItem('balance') ? parseInt(localStorage.getItem('balance')) : 406520;
         let energy = localStorage.getItem('energy') ? parseInt(localStorage.getItem('energy')) : 100000;
         const maxEnergy = 100000;
-        const energyDecrease = 100; // Jumlah energy yang berkurang setiap klik
-        const coinAmount = 100; // Jumlah koin yang ditambahkan setiap klik
+        const energyDecrease = 100;
+        const coinAmount = 100;
 
-        // Fungsi untuk memperbarui nilai di local storage
         function updateLocalStorage() {
             localStorage.setItem('balance', balance);
             localStorage.setItem('energy', energy);
@@ -130,20 +131,13 @@
             if (energy > 0) {
                 balance += coinAmount;
                 document.getElementById("balance").innerText = balance.toLocaleString();
-
-                // Kurangi energy
                 energy -= energyDecrease;
-                if (energy < 0) energy = 0; // Pastikan tidak negatif
+                if (energy < 0) energy = 0;
                 document.getElementById("energy-text").innerText = `${energy}/${maxEnergy}`;
-
-                // Update tampilan progress bar
                 const energyPercentage = (energy / maxEnergy) * 100;
                 document.getElementById("energy-level").style.width = `${energyPercentage}%`;
-
-                // Simpan data ke local storage
                 updateLocalStorage();
 
-                // Menambahkan efek goyang pada ikon
                 const icon = document.querySelector('.currency-icon');
                 icon.classList.add('clicked');
                 setTimeout(() => icon.classList.remove('clicked'), 300);
@@ -154,22 +148,18 @@
 
         function rechargeEnergy() {
             if (energy < maxEnergy) {
-                energy += maxEnergy / 3600; // Menambah energy setiap detik
-                if (energy > maxEnergy) energy = maxEnergy; // Pastikan tidak melebihi maksimum
+                energy += maxEnergy / 3600;
+                if (energy > maxEnergy) energy = maxEnergy;
                 document.getElementById("energy-text").innerText = `${Math.floor(energy)}/${maxEnergy}`;
                 document.getElementById("energy-level").style.width = `${(energy / maxEnergy) * 100}%`;
-
-                // Simpan data ke local storage
                 updateLocalStorage();
             }
         }
 
-        // Set nilai awal dari local storage saat halaman dimuat
         document.getElementById("balance").innerText = balance.toLocaleString();
         document.getElementById("energy-text").innerText = `${energy}/${maxEnergy}`;
         document.getElementById("energy-level").style.width = `${(energy / maxEnergy) * 100}%`;
 
-        // Jalankan pengisian energy setiap detik
         setInterval(rechargeEnergy, 1000);
     </script>
 </body>

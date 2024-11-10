@@ -19,8 +19,9 @@
             width: 100%;
             text-align: center;
             padding: 20px;
-            font-size: 4.5em;
-            font-weight: 900;
+            font-size: 4.5em; /* Perbesar ukuran title */
+            font-weight: bold;
+            font-weight: 900; /* Penebalan tiga kali lipat */
             background: linear-gradient(to right, silver, blue);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -35,27 +36,23 @@
             font-size: 2.5em;
         }
         .currency-icon {
-            width: 150px;
-            height: 150px;
+            font-size: 14em;
             cursor: pointer;
             margin-top: 20px;
-            border-radius: 50%; /* Membuat gambar bulat */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 
-                        inset 0 4px 8px rgba(255, 255, 255, 0.2); /* Efek 3D */
-            transition: transform 5s ease-in-out;
+            transition: transform 5s ease-in-out; /* Perputaran menjadi 5 detik */
         }
         .currency-icon.spin {
-            animation: spin 5s linear;
+            animation: spin 5s linear; /* Perputaran lebih lambat */
         }
         @keyframes spin {
             from {transform: rotate(0deg);}
             to {transform: rotate(360deg);}
         }
         .currency-icon:active {
-            animation: none;
+            animation: none; /* Hilangkan bayangan kotak saat aktif */
         }
         .energy-bar {
-            margin: 0 auto;
+            margin: 0 auto; /* Pusatkan progress bar */
             width: 50%;
             height: 20px;
             background-color: rgba(255, 255, 255, 0.3);
@@ -65,7 +62,7 @@
         .energy-level {
             background-color: green;
             height: 100%;
-            width: 100%;
+            width: 50%;
             transition: width 0.3s ease-in-out;
         }
         .menu {
@@ -102,10 +99,10 @@
         <div>Your Balance:</div>
         <div class="balance" id="balance">406,520</div>
         <div class="energy-bar">
-            <div class="energy-level" id="energy-level"></div>
+            <div class="energy-level" id="energy-level" style="width: 100%;"></div>
         </div>
         <div id="energy-text">100000/100000</div>
-        <img src="file-path-to-nitrous-icon.png" class="currency-icon" id="currency-icon" onclick="earnCoins()">
+        <div class="currency-icon" id="currency-icon" onclick="earnCoins()">🪙</div>
     </div>
 
     <!-- Halaman Mates -->
@@ -151,15 +148,16 @@
     </div>
 
     <script>
+        // Variabel dan fungsi utama
         let balance = localStorage.getItem('balance') ? parseInt(localStorage.getItem('balance')) : 406520;
         let energy = localStorage.getItem('energy') ? parseInt(localStorage.getItem('energy')) : 100000;
         const maxEnergy = 100000;
-        const coinAmount = 27; // Set jumlah koin per detik untuk pengisian ulang
-        const rechargeRate = 1000; // 1000 ms = 1 detik
+        const energyDecrease = 100;
+        const coinAmount = 100;
 
         document.getElementById("balance").innerText = balance.toLocaleString();
         document.getElementById("energy-text").innerText = `${energy}/${maxEnergy}`;
-        document.getElementById("home").style.display = "block";
+        document.getElementById("home").style.display = "block"; // Tampilan awal
 
         function updateLocalStorage() {
             localStorage.setItem('balance', balance);
@@ -170,12 +168,12 @@
             const currencyIcon = document.getElementById("currency-icon");
             if (!currencyIcon.classList.contains("spin")) {
                 currencyIcon.classList.add("spin");
-                setTimeout(() => currencyIcon.classList.remove("spin"), 5000);
+                setTimeout(() => currencyIcon.classList.remove("spin"), 5000); // 5 detik
             }
             if (energy > 0) {
                 balance += coinAmount;
                 document.getElementById("balance").innerText = balance.toLocaleString();
-                energy -= 100;
+                energy -= energyDecrease;
                 if (energy < 0) energy = 0;
                 document.getElementById("energy-text").innerText = `${energy}/${maxEnergy}`;
                 document.getElementById("energy-level").style.width = `${(energy / maxEnergy) * 100}%`;
@@ -185,20 +183,61 @@
             }
         }
 
-        setInterval(() => {
-            if (energy < maxEnergy) {
-                energy += coinAmount;
-                if (energy > maxEnergy) energy = maxEnergy;
-                document.getElementById("energy-text").innerText = `${energy}/${maxEnergy}`;
-                document.getElementById("energy-level").style.width = `${(energy / maxEnergy) * 100}%`;
-                updateLocalStorage();
-            }
-        }, rechargeRate);
-
+        // Fungsi navigasi halaman
         function showPage(pageId) {
             document.querySelectorAll('.balance-container, .page-content').forEach(page => page.style.display = 'none');
             document.getElementById(pageId).style.display = 'block';
         }
+
+        function showTasks() {
+            const questions = [
+                { question: "Siapa pendiri dari N-TROUS?", answer: "Rizki Maryanto" },
+                { question: "Tanggal berapakah N-TROUS dibuat?", answer: "09-09-2024" },
+                { question: "Ada berapa orang team dari N-TROUS?", answer: "12" },
+                { question: "Di jaringan manakah N-TROUS?", answer: "Polygon" },
+                { question: "Berapa total suplai dari N-TROUS?", answer: "150.000.000" },
+            ];
+            for (let q of questions) {
+                const userAnswer = prompt(q.question);
+                if (userAnswer === q.answer) {
+                    balance += 100000;
+                    document.getElementById("balance").innerText = balance.toLocaleString();
+                    updateLocalStorage();
+                    alert("Jawaban benar! Anda mendapat 100,000 koin.");
+                } else {
+                    alert("Jawaban salah.");
+                }
+            }
+        }
+
+        function showBoostOptions() {
+            const level = parseInt(prompt("Pilih level boost:\n1. 10,000 koin\n2. 50,000 koin\n3. 100,000 koin\nMasukkan nomor pilihan Anda:"));
+            let boostAmount = 0;
+
+            if (level === 1) {
+                boostAmount = 10000;
+            } else if (level === 2) {
+                boostAmount = 50000;
+            } else if (level === 3) {
+                boostAmount = 100000;
+            } else {
+                alert("Pilihan tidak valid.");
+                return;
+            }
+
+            if (balance >= boostAmount) {
+                balance -= boostAmount;
+                energy = maxEnergy;
+                document.getElementById("balance").innerText = balance.toLocaleString();
+                document.getElementById("energy-text").innerText = `${energy}/${maxEnergy}`;
+                document.getElementById("energy-level").style.width = "100%";
+                updateLocalStorage();
+                alert(`Boost berhasil! Anda telah menggunakan ${boostAmount} koin.`);
+            } else {
+                alert("Koin Anda tidak mencukupi untuk boost ini.");
+            }
+        }
     </script>
 </body>
 </html>
+

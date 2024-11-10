@@ -18,45 +18,45 @@
         .header {
             width: 100%;
             text-align: center;
-            padding: 50px;
+            padding: 20px;
             font-size: 1.5em;
             font-weight: bold;
             background: #000000;
         }
         .balance-container {
-            margin-top: 50px;
+            margin-top: 20px;
             text-align: center;
         }
         .balance {
             font-size: 2.5em;
         }
         .currency-icon {
-            font-size: 10em;
+            font-size: 4em;
         }
         .status-bar {
             background: purple;
             border-radius: 15px;
-            padding: 10px 20px;
-            margin-top: 15px;
+            padding: 5px 15px;
+            margin-top: 10px;
         }
         .energy-bar {
             width: 80%;
             background: #444;
-            border-radius: 20px;
+            border-radius: 10px;
             margin: 20px 0;
         }
         .energy-level {
             width: 36%;
             height: 20px;
             background: purple;
-            border-radius: 20px;
+            border-radius: 10px;
         }
         .menu {
             display: flex;
             justify-content: space-around;
             width: 100%;
             background: #000;
-            padding: 20px;
+            padding: 10px;
             position: absolute;
             bottom: 0;
         }
@@ -75,19 +75,19 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 5em;
+            font-size: 1em;
         }
     </style>
 </head>
 <body>
     <div class="header">T-COIN</div>
     <div class="balance-container">
-        <div class="status-bar">Staking is coming soon</div>
+        <div class="status-bar">Staking closes in 10 days</div>
         <div>Your Balance:</div>
-        <div class="balance" id="balance">1000</div>
+        <div class="balance" id="balance">406,520</div>
         <div class="currency-icon">🪙</div>
     </div>
-    <button class="earn-button" onclick="☢️()">Earn Coins</button>
+    <button class="earn-button" onclick="earnCoins()">Earn Coins</button>
     <div class="energy-bar">
         <div class="energy-level"></div>
     </div>
@@ -113,11 +113,11 @@
 
     <script>
         // Initial balance
-        let balance = 1000;
+        let balance = 406520;
 
         // Function to add coins
         function earnCoins() {
-            const coinAmount = 1;  // jumlah koin yang ditambahkan setiap klik
+            const coinAmount = 1000;  // jumlah koin yang ditambahkan setiap klik
             balance += coinAmount;
             document.getElementById("balance").innerText = balance.toLocaleString(); // update tampilan balance
         }

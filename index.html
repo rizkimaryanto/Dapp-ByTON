@@ -5,83 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>T-Coin</title>
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(145deg, #2c003e, #3b0066);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-        }
-        .header {
-            width: 100%;
-            text-align: center;
-            padding: 20px;
-            font-size: 1.5em;
-            font-weight: bold;
-            background: #000000;
-        }
-        .balance-container {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .balance {
-            font-size: 2.5em;
-        }
-        .currency-icon {
-            font-size: 14em; /* Memperbesar ikon currency */
-            cursor: pointer;
-            margin-top: 20px;
-            text-shadow: 4px 4px 0px #000, -4px 4px 0px #000, 4px -4px 0px #000, -4px -4px 0px #000; /* Menambah ketebalan */
-            transition: transform 0.1s, box-shadow 0.1s; /* Menambah transisi untuk animasi */
-            display: inline-block; /* Menghilangkan efek kotak */
-        }
-        .currency-icon.clicked {
-            animation: shake 0.3s ease; /* Menambahkan animasi shake */
-            box-shadow: none; /* Menghilangkan bayangan kotak */
-        }
-        @keyframes shake {
-            0%, 100% { transform: scale(1); }
-            25% { transform: scale(1.05); }
-            50% { transform: scale(0.95); }
-            75% { transform: scale(1.05); }
-        }
-        .status-bar {
-            background: purple;
-            border-radius: 15px;
-            padding: 5px 15px;
-            margin-top: 10px;
-        }
-        .energy-bar {
-            width: 80%;
-            background: #444;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-        .energy-level {
-            height: 20px;
-            background: purple;
-            border-radius: 10px;
-            width: 100%;
-        }
-        .menu {
-            display: flex;
-            justify-content: space-around;
-            width: 100%;
-            background: #000;
-            padding: 10px;
-            position: absolute;
-            bottom: 0;
-        }
-        .menu-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #bbb;
-            cursor: pointer;
-        }
+        /* ...existing styles... */
+        .menu-item span { font-size: 1.5em; }
     </style>
 </head>
 <body>
@@ -97,11 +22,11 @@
         <div id="energy-text">100000/100000</div>
     </div>
     <div class="menu">
-        <div class="menu-item" onclick="alert('Mates feature coming soon!')">
+        <div class="menu-item" onclick="matesMenu()">
             <span>👤</span>
             <div>Mates</div>
         </div>
-        <div class="menu-item" onclick="alert('Tasks feature coming soon!')">
+        <div class="menu-item" onclick="tasksMenu()">
             <span>📋</span>
             <div>Tasks</div>
         </div>
@@ -109,58 +34,98 @@
             <span>🏦</span>
             <div>Staking</div>
         </div>
-        <div class="menu-item" onclick="alert('Boost feature coming soon!')">
+        <div class="menu-item" onclick="boostMenu()">
             <span>🚀</span>
             <div>Boost</div>
+        </div>
+        <div class="menu-item" onclick="gameMenu()">
+            <span>🎮</span>
+            <div>Game</div>
         </div>
     </div>
 
     <script>
-        let balance = localStorage.getItem('balance') ? parseInt(localStorage.getItem('balance')) : 406520;
-        let energy = localStorage.getItem('energy') ? parseInt(localStorage.getItem('energy')) : 100000;
+        let balance = 406520;
+        let energy = 100000;
         const maxEnergy = 100000;
-        const energyDecrease = 100;
         const coinAmount = 100;
-
-        function updateLocalStorage() {
-            localStorage.setItem('balance', balance);
-            localStorage.setItem('energy', energy);
-        }
+        let clickReward = 100;
 
         function earnCoins() {
             if (energy > 0) {
-                balance += coinAmount;
-                document.getElementById("balance").innerText = balance.toLocaleString();
-                energy -= energyDecrease;
-                if (energy < 0) energy = 0;
-                document.getElementById("energy-text").innerText = `${energy}/${maxEnergy}`;
-                const energyPercentage = (energy / maxEnergy) * 100;
-                document.getElementById("energy-level").style.width = `${energyPercentage}%`;
-                updateLocalStorage();
-
-                const icon = document.querySelector('.currency-icon');
-                icon.classList.add('clicked');
-                setTimeout(() => icon.classList.remove('clicked'), 300);
+                balance += clickReward;
+                energy -= 100;
+                updateDisplay();
             } else {
                 alert("Energy depleted! Wait for it to recharge.");
             }
         }
 
-        function rechargeEnergy() {
-            if (energy < maxEnergy) {
-                energy += maxEnergy / 3600;
-                if (energy > maxEnergy) energy = maxEnergy;
-                document.getElementById("energy-text").innerText = `${Math.floor(energy)}/${maxEnergy}`;
-                document.getElementById("energy-level").style.width = `${(energy / maxEnergy) * 100}%`;
-                updateLocalStorage();
+        function updateDisplay() {
+            document.getElementById("balance").innerText = balance.toLocaleString();
+            document.getElementById("energy-text").innerText = `${energy}/${maxEnergy}`;
+            document.getElementById("energy-level").style.width = `${(energy / maxEnergy) * 100}%`;
+            localStorage.setItem('balance', balance);
+            localStorage.setItem('energy', energy);
+        }
+
+        function matesMenu() {
+            if (confirm("Share this code to add friends: https://rizkimaryanto.github.io/Dapp-ByTON/")) {
+                alert("Code shared!");
             }
         }
 
-        document.getElementById("balance").innerText = balance.toLocaleString();
-        document.getElementById("energy-text").innerText = `${energy}/${maxEnergy}`;
-        document.getElementById("energy-level").style.width = `${(energy / maxEnergy) * 100}%`;
+        function tasksMenu() {
+            const questions = [
+                { q: "Siapa pendiri dari N-TROUS?", a: "A", correct: "Rizki Maryanto" },
+                { q: "Tanggal berapakah N-TROUS dibuat?", a: "B", correct: "09-09-2024" },
+                { q: "Ada berapa orang team dari N-TROUS?", a: "C", correct: "12" },
+                { q: "Di jaringan manakah N-TROUS?", a: "D", correct: "Polygon" },
+                { q: "Berapa total suplai dari N-TROUS?", a: "A", correct: "150.000.000" }
+            ];
 
-        setInterval(rechargeEnergy, 1000);
+            questions.forEach((q, idx) => {
+                let answer = prompt(`${idx + 1}. ${q.q}\nA) Rizki Maryanto\nB) 09-09-2024\nC) 12\nD) Polygon`);
+                if (answer && answer.toUpperCase() === q.a) {
+                    alert("Correct! You've earned 100k coins.");
+                    balance += 100000;
+                } else {
+                    alert("Jawaban salah.");
+                }
+            });
+            updateDisplay();
+        }
+
+        function boostMenu() {
+            const boosts = [
+                { cost: 10000, level: 2 },
+                { cost: 100000, level: 3 },
+                { cost: 1000000, level: 4 }
+            ];
+
+            boosts.forEach(boost => {
+                if (balance >= boost.cost) {
+                    if (confirm(`Pay ${boost.cost.toLocaleString()} coins to increase to level ${boost.level}?`)) {
+                        balance -= boost.cost;
+                        clickReward *= 2;
+                        energy = Math.min(energy * 2, maxEnergy);
+                        updateDisplay();
+                    }
+                } else {
+                    alert(`Insufficient balance for level ${boost.level}`);
+                }
+            });
+        }
+
+        function gameMenu() {
+            alert("Welcome to the Game menu! Tap to earn rewards!");
+        }
+
+        updateDisplay();
+        setInterval(() => {
+            energy = Math.min(energy + 10, maxEnergy);
+            updateDisplay();
+        }, 1000);
     </script>
 </body>
 </html>

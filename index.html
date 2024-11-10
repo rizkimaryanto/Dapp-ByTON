@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T-Coin</title>
+    <title>Nitrous Coin Game</title>
     <style>
         body {
             margin: 0;
@@ -21,9 +21,9 @@
             padding: 20px;
             font-size: 1.5em;
             font-weight: bold;
-            background: #000000;
+            background: #000;
         }
-        .page-content {
+        .home-content, .balance-container, .page-content {
             text-align: center;
             display: none;
             margin-top: 20px;
@@ -34,14 +34,8 @@
             margin-top: 20px;
             transition: transform 0.1s;
         }
-        .currency-icon.clicked {
-            animation: shake 0.3s ease;
-        }
-        @keyframes shake {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-10deg); }
-            50% { transform: rotate(10deg); }
-            75% { transform: rotate(-5deg); }
+        .currency-icon:active {
+            transform: scale(1.2) rotate(10deg);
         }
         .menu {
             display: flex;
@@ -62,20 +56,24 @@
     </style>
 </head>
 <body>
-    <div class="header">T-COIN</div>
+    <div class="header">NITROUS Coin</div>
     
     <!-- Halaman Home -->
-    <div class="page-content" id="home">
-        <h2>Selamat datang di game tap!</h2>
-        <p>Anda sedang menggunakan NITROUS (N-TROUS), token unik berbasis Polygon. Total suplai sebanyak 150 juta koin, dengan founder Rizki Maryanto. Koin ini diluncurkan pada 09-09-2024 dan dikembangkan oleh tim profesional berjumlah 12 orang.</p>
+    <div class="home-content" id="home">
+        <h2>Selamat datang di Nitrous Coin Game</h2>
+        <p>Nitrous (N-TROUS) adalah koin berbasis jaringan Polygon dengan total suplai 150 juta. Diluncurkan pada 09-09-2024 oleh pendiri Rizki Maryanto bersama tim beranggotakan 12 orang, proyek ini berkomitmen untuk memberikan pengalaman permainan yang menarik dan menguntungkan bagi pengguna di seluruh dunia.</p>
     </div>
-
+    
     <!-- Halaman Game -->
-    <div class="page-content" id="gamePage">
+    <div class="balance-container" id="gamePage">
         <h2>Game Menu</h2>
-        <p>Klik ikon koin di bawah ini untuk mulai bermain dan mengumpulkan koin.</p>
+        <p>Ketuk ikon koin di bawah untuk mulai mendapatkan koin.</p>
         <div class="currency-icon" onclick="earnCoins()">🪙</div>
-        <div class="balance">Balance: <span id="balance">406,520</span></div>
+        <div>Your Balance: <span id="balance">406,520</span></div>
+        <div class="energy-bar">
+            <div class="energy-level" id="energy-level" style="width: 100%;"></div>
+        </div>
+        <div id="energy-text">100000/100000</div>
     </div>
 
     <!-- Halaman Mates -->
@@ -121,34 +119,40 @@
     </div>
 
     <script>
+        // Variabel dan fungsi utama
         let balance = localStorage.getItem('balance') ? parseInt(localStorage.getItem('balance')) : 406520;
+        let energy = localStorage.getItem('energy') ? parseInt(localStorage.getItem('energy')) : 100000;
+        const maxEnergy = 100000;
+        const energyDecrease = 100;
         const coinAmount = 100;
 
-        function showPage(pageId) {
-            document.querySelectorAll('.page-content').forEach(page => page.style.display = 'none');
-            document.getElementById(pageId).style.display = 'block';
+        document.getElementById("balance").innerText = balance.toLocaleString();
+        document.getElementById("energy-text").innerText = `${energy}/${maxEnergy}`;
+        document.getElementById("home").style.display = "block"; // Tampilan awal di Home
+
+        function updateLocalStorage() {
+            localStorage.setItem('balance', balance);
+            localStorage.setItem('energy', energy);
         }
 
         function earnCoins() {
-            balance += coinAmount;
-            document.getElementById("balance").innerText = balance.toLocaleString();
-            document.querySelector(".currency-icon").classList.add("clicked");
-            setTimeout(() => {
-                document.querySelector(".currency-icon").classList.remove("clicked");
-            }, 300);
-            localStorage.setItem('balance', balance);
+            if (energy > 0) {
+                balance += coinAmount;
+                document.getElementById("balance").innerText = balance.toLocaleString();
+                energy -= energyDecrease;
+                if (energy < 0) energy = 0;
+                document.getElementById("energy-text").innerText = `${energy}/${maxEnergy}`;
+                document.getElementById("energy-level").style.width = `${(energy / maxEnergy) * 100}%`;
+                updateLocalStorage();
+            } else {
+                alert("Energy depleted! Wait for it to recharge.");
+            }
         }
 
-        function showTasks() {
-            // Tambahkan logika untuk Task di sini
+        function showPage(pageId) {
+            document.querySelectorAll('.home-content, .balance-container, .page-content').forEach(page => page.style.display = 'none');
+            document.getElementById(pageId).style.display = 'block';
         }
-
-        function showBoostOptions() {
-            // Tambahkan logika untuk Boost di sini
-        }
-
-        document.getElementById("balance").innerText = balance.toLocaleString();
-        showPage('home'); // Tampilkan halaman awal
     </script>
 </body>
 </html>

@@ -31,7 +31,7 @@
             font-size: 2.5em;
         }
         .currency-icon {
-            font-size: 4em;
+            font-size: 12em; /* Ukuran diperbesar tiga kali */
             cursor: pointer;
             margin-top: 20px;
         }
@@ -72,17 +72,17 @@
     </style>
 </head>
 <body>
-    <div class="header">T-COIN</div>
+    <div class="header">KONTOL-COIN</div>
     <div class="balance-container">
-        <div class="status-bar">Staking closes in 10 days</div>
+        <div class="status-bar">Staking coming soon</div>
         <div>Your Balance:</div>
-        <div class="balance" id="balance">406,520</div>
+        <div class="balance" id="balance">4,065,200</div>
         <div class="currency-icon" onclick="earnCoins()">🪙</div> <!-- Icon currency sebagai tombol -->
+        <div class="energy-bar">
+            <div class="energy-level" id="energy-level"></div>
+        </div>
+        <div id="energy-text">100000/100000</div>
     </div>
-    <div class="energy-bar">
-        <div class="energy-level" id="energy-level"></div>
-    </div>
-    <div id="energy-text">2000/5500</div>
     <div class="menu">
         <div class="menu-item" onclick="alert('Mates feature coming soon!')">
             <span>👤</span>
@@ -103,20 +103,21 @@
     </div>
 
     <script>
-        let balance = 406520;
-        let energy = 2000;
-        const maxEnergy = 5500;
-        const energyDecrease = 50; // Jumlah energy yang berkurang setiap klik
-        const coinAmount = 1000; // Jumlah koin yang ditambahkan setiap klik
+        let balance = 4065200;
+        let energy = 100000;
+        const maxEnergy = 100000;
+        const energyDecrease = 100; // Jumlah energy yang berkurang setiap klik
+        const coinAmount = 100; // Jumlah koin yang ditambahkan setiap klik
 
+        // Fungsi untuk menambahkan koin dan mengurangi energy
         function earnCoins() {
             if (energy > 0) {
-                // Tambahkan koin ke balance
                 balance += coinAmount;
                 document.getElementById("balance").innerText = balance.toLocaleString();
 
                 // Kurangi energy
                 energy -= energyDecrease;
+                if (energy < 0) energy = 0; // Pastikan tidak negatif
                 document.getElementById("energy-text").innerText = `${energy}/${maxEnergy}`;
 
                 // Update tampilan progress bar
@@ -126,6 +127,19 @@
                 alert("Energy depleted! Wait for it to recharge.");
             }
         }
+
+        // Fungsi untuk mengisi ulang energy setiap 1 jam (100% dalam 1 jam)
+        function rechargeEnergy() {
+            if (energy < maxEnergy) {
+                energy += maxEnergy / 3600; // Menambah energy setiap detik
+                if (energy > maxEnergy) energy = maxEnergy; // Pastikan tidak melebihi maksimum
+                document.getElementById("energy-text").innerText = `${Math.floor(energy)}/${maxEnergy}`;
+                document.getElementById("energy-level").style.width = `${(energy / maxEnergy) * 100}%`;
+            }
+        }
+
+        // Jalankan pengisian energy setiap detik
+        setInterval(rechargeEnergy, 27);
     </script>
 </body>
 </html>

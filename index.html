@@ -20,7 +20,6 @@
             text-align: center;
             padding: 20px;
             font-size: 4.5em;
-            font-weight: bold;
             font-weight: 900;
             background: linear-gradient(to right, silver, blue);
             -webkit-background-clip: text;
@@ -36,10 +35,13 @@
             font-size: 2.5em;
         }
         .currency-icon {
-            width: 150px; /* Sesuaikan ukuran ikon */
+            width: 150px;
             height: 150px;
             cursor: pointer;
             margin-top: 20px;
+            border-radius: 50%; /* Membuat gambar bulat */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 
+                        inset 0 4px 8px rgba(255, 255, 255, 0.2); /* Efek 3D */
             transition: transform 5s ease-in-out;
         }
         .currency-icon.spin {

@@ -103,11 +103,17 @@
     </div>
 
     <script>
-        let balance = 406520;
-        let energy = 100000;
+        let balance = localStorage.getItem('balance') ? parseInt(localStorage.getItem('balance')) : 406520;
+        let energy = localStorage.getItem('energy') ? parseInt(localStorage.getItem('energy')) : 100000;
         const maxEnergy = 100000;
-        const energyDecrease = 5000; // Jumlah energy yang berkurang setiap klik
+        const energyDecrease = 100; // Jumlah energy yang berkurang setiap klik
         const coinAmount = 100; // Jumlah koin yang ditambahkan setiap klik
+
+        // Fungsi untuk memperbarui nilai di local storage
+        function updateLocalStorage() {
+            localStorage.setItem('balance', balance);
+            localStorage.setItem('energy', energy);
+        }
 
         function earnCoins() {
             if (energy > 0) {
@@ -122,6 +128,9 @@
                 // Update tampilan progress bar
                 const energyPercentage = (energy / maxEnergy) * 100;
                 document.getElementById("energy-level").style.width = `${energyPercentage}%`;
+
+                // Simpan data ke local storage
+                updateLocalStorage();
             } else {
                 alert("Energy depleted! Wait for it to recharge.");
             }
@@ -133,9 +142,18 @@
                 if (energy > maxEnergy) energy = maxEnergy; // Pastikan tidak melebihi maksimum
                 document.getElementById("energy-text").innerText = `${Math.floor(energy)}/${maxEnergy}`;
                 document.getElementById("energy-level").style.width = `${(energy / maxEnergy) * 100}%`;
+
+                // Simpan data ke local storage
+                updateLocalStorage();
             }
         }
 
+        // Set nilai awal dari local storage saat halaman dimuat
+        document.getElementById("balance").innerText = balance.toLocaleString();
+        document.getElementById("energy-text").innerText = `${energy}/${maxEnergy}`;
+        document.getElementById("energy-level").style.width = `${(energy / maxEnergy) * 100}%`;
+
+        // Jalankan pengisian energy setiap detik
         setInterval(rechargeEnergy, 1000);
     </script>
 </body>

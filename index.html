@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nitrous</title>
+    <title>Semangka Click</title>
     <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(145deg, #2c003e, #3b0066);
+            background: linear-gradient(145deg, #1f8f3f, #0a5d22);
             color: white;
             display: flex;
             flex-direction: column;
@@ -19,10 +19,9 @@
             width: 100%;
             text-align: center;
             padding: 20px;
-            font-size: 4.5em; /* Perbesar ukuran title */
-            font-weight: bold;
-            font-weight: 900; /* Penebalan tiga kali lipat */
-            background: linear-gradient(to right, silver, blue);
+            font-size: 4.5em;
+            font-weight: 900;
+            background: linear-gradient(to right, #f44336, #4caf50);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
@@ -39,20 +38,17 @@
             font-size: 14em;
             cursor: pointer;
             margin-top: 20px;
-            transition: transform 5s ease-in-out; /* Perputaran menjadi 5 detik */
+            transition: transform 3s ease-in-out;
         }
         .currency-icon.spin {
-            animation: spin 5s linear; /* Perputaran lebih lambat */
+            animation: spin 3s linear;
         }
         @keyframes spin {
-            from {transform: rotate(0deg);}
-            to {transform: rotate(360deg);}
-        }
-        .currency-icon:active {
-            animation: none; /* Hilangkan bayangan kotak saat aktif */
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
         .energy-bar {
-            margin: 0 auto; /* Pusatkan progress bar */
+            margin: 0 auto;
             width: 50%;
             height: 20px;
             background-color: rgba(255, 255, 255, 0.3);
@@ -62,7 +58,7 @@
         .energy-level {
             background-color: green;
             height: 100%;
-            width: 50%;
+            width: 100%;
             transition: width 0.3s ease-in-out;
         }
         .menu {
@@ -84,32 +80,32 @@
     </style>
 </head>
 <body>
-    <div class="header">Nitrous</div>
-    
+    <div class="header">Semangka Click</div>
+
     <!-- Halaman Home -->
     <div class="balance-container" id="home">
-        <div class="status-bar">Selamat datang di game tap</div>
-        <p>Game berbasis blockchain, N-TROUS, diluncurkan di jaringan Polygon dengan total suplai 150 juta koin. Didirikan oleh Rizki Maryanto, proyek ini melibatkan tim beranggotakan 12 orang dan diluncurkan pada tanggal 09-09-2024. Game ini menggunakan koin N-TROUS sebagai mata uang utama.</p>
+        <div class="status-bar">Selamat datang di Semangka Click</div>
+        <p>Game pengumpulan koin berbasis blockchain, "Semangka". Mulai mengumpulkan koin sekarang!</p>
     </div>
-    
+
     <!-- Halaman Game -->
     <div class="page-content" id="gamePage">
         <h2>Game Menu</h2>
-        <p>Selamat datang di Game! Ketuk ikon koin untuk mulai mendapatkan koin.</p>
-        <div>Your Balance:</div>
+        <p>Klik ikon semangka untuk mulai mengumpulkan koin.</p>
+        <div>Saldo Anda:</div>
         <div class="balance" id="balance">406,520</div>
         <div class="energy-bar">
             <div class="energy-level" id="energy-level" style="width: 100%;"></div>
         </div>
         <div id="energy-text">100000/100000</div>
-        <div class="currency-icon" id="currency-icon" onclick="earnCoins()">🪙</div>
+        <div class="currency-icon" id="currency-icon" onclick="earnCoins()">🍉</div>
     </div>
 
-    <!-- Halaman Mates -->
+    <!-- Halaman Referral -->
     <div class="page-content" id="matesPage">
-        <h2>Mates Menu</h2>
-        <p>Bagikan kode ini untuk menambahkan teman:</p>
-        <p><a href="https://rizkimaryanto.github.io/Dapp-ByTON/">https://rizkimaryanto.github.io/Dapp-ByTON/</a></p>
+        <h2>Referral Menu</h2>
+        <p>Bagikan kode referral ini untuk mengundang teman:</p>
+        <p><a href="https://example.com">https://example.com</a></p>
     </div>
 
     <!-- Halaman Tasks -->
@@ -121,7 +117,7 @@
     <!-- Halaman Boost -->
     <div class="page-content" id="boostPage">
         <h2>Boost Menu</h2>
-        <button onclick="showBoostOptions()">Pilih Boost Level</button>
+        <button onclick="showBoostOptions()">Pilih Level Boost</button>
     </div>
 
     <div class="menu">
@@ -135,7 +131,7 @@
         </div>
         <div class="menu-item" onclick="showPage('matesPage')">
             <span>👤</span>
-            <div>Mates</div>
+            <div>Referral</div>
         </div>
         <div class="menu-item" onclick="showPage('tasksPage')">
             <span>📋</span>
@@ -168,7 +164,7 @@
             const currencyIcon = document.getElementById("currency-icon");
             if (!currencyIcon.classList.contains("spin")) {
                 currencyIcon.classList.add("spin");
-                setTimeout(() => currencyIcon.classList.remove("spin"), 5000); // 5 detik
+                setTimeout(() => currencyIcon.classList.remove("spin"), 3000); // 3 detik
             }
             if (energy > 0) {
                 balance += coinAmount;
@@ -179,7 +175,7 @@
                 document.getElementById("energy-level").style.width = `${(energy / maxEnergy) * 100}%`;
                 updateLocalStorage();
             } else {
-                alert("Energy depleted! Wait for it to recharge.");
+                alert("Energi habis! Tunggu untuk isi ulang.");
             }
         }
 
@@ -191,11 +187,9 @@
 
         function showTasks() {
             const questions = [
-                { question: "Siapa pendiri dari N-TROUS?", answer: "Rizki Maryanto" },
-                { question: "Tanggal berapakah N-TROUS dibuat?", answer: "09-09-2024" },
-                { question: "Ada berapa orang team dari N-TROUS?", answer: "12" },
-                { question: "Di jaringan manakah N-TROUS?", answer: "Polygon" },
-                { question: "Berapa total suplai dari N-TROUS?", answer: "150.000.000" },
+                { question: "Apa nama tokennya?", answer: "Semangka" },
+                { question: "Simbol token?", answer: "Semangka" },
+                { question: "Berapa total suplai token?", answer: "100000000000" }
             ];
             for (let q of questions) {
                 const userAnswer = prompt(q.question);

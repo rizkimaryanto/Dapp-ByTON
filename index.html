@@ -160,32 +160,126 @@
         <input type="number" id="stakeAmount" placeholder="Jumlah Token untuk di-Stake" />
         <button onclick="stakeTokens()">Stake Sekarang</button>
     </div>
+    <!-- Registrasi -->
+    <div class="container" id="register">
+        <h2>Registrasi</h2>
+        <input type="text" id="userName" placeholder="Nama Pengguna">
+        <input type="password" id="password" placeholder="Kata Sandi">
+        <input type="text" id="walletAddress" placeholder="Alamat Wallet">
+        <button onclick="registerUser()">Daftar</button>
+    </div>
 
+    <!-- Staking -->
+    <div class="container" id="staking">
+        <h2>Staking</h2>
+        <input type="number" id="stakeAmount" placeholder="Jumlah Token untuk Stake">
+        <button onclick="stakeTokens()">Stake Sekarang</button>
+    </div>
+
+    <!-- Klaim Reward -->
+    <div class="container" id="claim">
+        <h2>Klaim Reward</h2>
+        <button onclick="claimReward()">Klaim Reward</button>
+    </div>
+
+    <!-- Bonus Harian -->
+    <div class="container" id="bonus">
+        <h2>Bonus Harian</h2>
+        <button onclick="claimDailyBonus()">Ambil Bonus Harian</button>
+    </div>
+
+    <!-- Withdraw -->
+    <div class="container" id="withdraw">
+        <h2>Withdraw</h2>
+        <input type="number" id="withdrawAmount" placeholder="Jumlah Token untuk Withdraw">
+        <button onclick="withdrawTokens()">Withdraw Sekarang</button>
+    </div>
     <script>
         // Konfigurasi Web3 dan Smart Contract
         const abi=[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"DailyBonusClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ReferralReward","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"uid","type":"uint256"},{"indexed":false,"internalType":"string","name":"username","type":"string"}],"name":"Registration","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"RewardClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"duration","type":"uint256"}],"name":"Staked","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}],"name":"Unstaked","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Withdrawal","type":"event"},{"inputs":[{"internalType":"address","name":"owner_","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"claimDailyBonus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"claimReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"clickLimitPer3Hours","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"dailyBonus","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"dailyClickLimit","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"logoCID","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"referralLimit","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"referralReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"referrals","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"refillRewardPool","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_username","type":"string"}],"name":"register","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"rewardPerClick","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rewardPool","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"stakes","outputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"startTime","type":"uint256"},{"internalType":"uint256","name":"duration","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"stakingAPY","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"stakingBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"userCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"userIdToAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"users","outputs":[{"internalType":"uint256","name":"uid","type":"uint256"},{"internalType":"string","name":"username","type":"string"},{"internalType":"address","name":"wallet","type":"address"},{"internalType":"uint256","name":"level","type":"uint256"},{"internalType":"uint256","name":"clickLimitLevel","type":"uint256"},{"internalType":"uint256","name":"rewardClaimed","type":"uint256"},{"internalType":"uint256","name":"referralCount","type":"uint256"},{"internalType":"uint256","name":"totalReward","type":"uint256"},{"internalType":"bool","name":"registered","type":"bool"},{"internalType":"uint256","name":"lastClaimTime","type":"uint256"},{"internalType":"uint256","name":"dailyBonusCount","type":"uint256"},{"internalType":"uint256","name":"totalClicks","type":"uint256"}],"stateMutability":"view","type":"function"}];
-        const contractAddress = '0x6F167EB8A90B84346A17f707c7850F318Cc44aC6';
+        const contractAddress = '0xb88b07C80B9e4e2b3c481623edE7978484aC8594';
         const web3 = new Web3(new Web3.providers.HttpProvider('https://polygon-mainnet.infura.io/v3/4b83836820944bf0bba486179ee4dbfd'));
         const contract = new web3.eth.Contract(abi, contractAddress);
-        const userAccount = '0xYourWalletAddress'; // Ganti dengan alamat wallet pengguna
+        const userAccount = '0xCf3022713F099b3D9C90066B70aF7dBD1feF5Af2'; // Ganti dengan alamat wallet pengguna
 
-        // Fungsi untuk melakukan staking
-        async function stakeTokens() {
-            const amount = document.getElementById("stakeAmount").value;
-            if (amount && !isNaN(amount) && amount > 0) {
-                try {
-                    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-                    const from = accounts[0]; // Alamat wallet pengguna
-                    await contract.methods.stakeTokens(amount).send({ from });
-                    alert('Staking berhasil!');
-                } catch (error) {
-                    console.error('Terjadi kesalahan saat staking:', error);
-                    alert('Gagal melakukan staking. Coba lagi.');
-                }
-            } else {
-                alert('Harap masukkan jumlah token yang valid.');
+         // Fungsi Registrasi
+        async function registerUser() {
+            const userName = document.getElementById("userName").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const walletAddress = document.getElementById("walletAddress").value.trim();
+
+            if (!userName || !password || !walletAddress) {
+                alert("Harap isi semua kolom!");
+                return;
+            }
+
+            try {
+                await contract.methods.registerUser(userName, password, walletAddress).send({ from: userAccount });
+                alert("Registrasi berhasil!");
+            } catch (error) {
+                console.error(error);
+                alert("Terjadi kesalahan saat registrasi.");
             }
         }
+
+        // Fungsi Staking
+        async function stakeTokens() {
+            const stakeAmount = document.getElementById("stakeAmount").value;
+
+            if (!stakeAmount || isNaN(stakeAmount) || stakeAmount <= 0) {
+                alert("Masukkan jumlah token yang valid.");
+                return;
+            }
+
+            try {
+                await contract.methods.stakeTokens(stakeAmount).send({ from: userAccount });
+                alert("Staking berhasil!");
+            } catch (error) {
+                console.error(error);
+                alert("Terjadi kesalahan saat staking.");
+            }
+        }
+
+        // Fungsi Klaim Reward
+        async function claimReward() {
+            try {
+                await contract.methods.claimReward().send({ from: userAccount });
+                alert("Reward berhasil diklaim!");
+            } catch (error) {
+                console.error(error);
+                alert("Terjadi kesalahan saat klaim reward.");
+            }
+        }
+
+        // Fungsi Bonus Harian
+        async function claimDailyBonus() {
+            try {
+                await contract.methods.claimDailyBonus().send({ from: userAccount });
+                alert("Bonus harian berhasil diklaim!");
+            } catch (error) {
+                console.error(error);
+                alert("Terjadi kesalahan saat klaim bonus harian.");
+            }
+        }
+
+        // Fungsi Withdraw
+        async function withdrawTokens() {
+            const withdrawAmount = document.getElementById("withdrawAmount").value;
+
+            if (!withdrawAmount || isNaN(withdrawAmount) || withdrawAmount <= 0) {
+                alert("Masukkan jumlah token yang valid.");
+                return;
+            }
+
+            try {
+                await contract.methods.withdrawTokens(withdrawAmount).send({ from: userAccount });
+                alert("Withdraw berhasil!");
+            } catch (error) {
+                console.error(error);
+                alert("Terjadi kesalahan saat withdraw.");
+            }
+        }
+    
     </script>
        </div>
     
